@@ -16,11 +16,22 @@ window.requestAnimFrame =
   var fileDropArea = document.getElementById('file-drop-area');
   var artist = document.getElementById('artist');
   var track = document.getElementById('track');
+  var fileUploadForm = document.getElementById('file-chooser');
+  var fileInput = document.getElementById('source-file');
 
   fileDropArea.addEventListener('drop', dropFile, false);
   fileDropArea.addEventListener('dragover', cancel, false);
   fileDropArea.addEventListener('dragenter', cancel, false);
   fileDropArea.addEventListener('dragexit', cancel, false);
+  fileUploadForm.addEventListener('submit', onSubmit, false);
+
+  function onSubmit(evt) {
+    evt.preventDefault();
+    evt.stopImmediatePropagation();
+
+    if (fileInput.files.length)
+      go(fileInput.files[0]);
+  }
 
   function cancel(evt) {
     evt.preventDefault();
@@ -34,19 +45,23 @@ window.requestAnimFrame =
     var files = evt.dataTransfer.files;
 
     if (files.length) {
-      musicDNA.parse(files[0]);
-      fileDropArea.classList.add('dropped');
-
-      ID3.loadTags("filename.mp3", function() {
-        var tags = ID3.getAllTags("filename.mp3");
-        if (tags.artist)
-          artist.innerText = tags.artist;
-        if (tags.title)
-          track.innerText = tags.title;
-      }, {
-        dataReader: FileAPIReader(files[0])
-      });
+      go(files[0]);
     }
+  }
+
+  function go(file) {
+    musicDNA.parse(file);
+    fileDropArea.classList.add('dropped');
+
+    ID3.loadTags("filename.mp3", function() {
+      var tags = ID3.getAllTags("filename.mp3");
+      if (tags.artist)
+        artist.innerText = tags.artist;
+      if (tags.title)
+        track.innerText = tags.title;
+    }, {
+      dataReader: FileAPIReader(file)
+    });
   }
 
 })();

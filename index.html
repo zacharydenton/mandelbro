@@ -21,6 +21,7 @@
       background: #111;
       width: 100%;
       height: 100%;
+      overflow: hidden;
     }
 
     #file-drop-area {
@@ -29,12 +30,16 @@
       right: 0;
       left: 0;
       bottom: 0;
-      background: rgba(0,0,0,0) url('drop-a-beat.png') center center no-repeat;
+      background: rgba(0,0,0,0) url('drop-a-beat.png') 50% 40% no-repeat;
       background-size: 420px 88px;
     }
 
     #file-drop-area.dropped {
       background-image: none;
+    }
+
+    #file-drop-area.dropped * {
+      display: none;
     }
 
     canvas {
@@ -79,12 +84,41 @@
       text-transform: uppercase;
       line-height: 1;
     }
+
+    form {
+      position: absolute;
+      left: 50%;
+      top: 60%;
+      width: 600px;
+      margin-left: -300px;
+      text-align: center;
+      color: #AAA;
+      font-family: 'Roboto';
+      font-size: 16px;
+    }
+
+    form div {
+      text-align: center;
+      margin-bottom: 1em;
+    }
   </style>
 </head>
 <body>
 
   <canvas id="render-area"></canvas>
-  <div id="file-drop-area"></div>
+  <div id="file-drop-area">
+    <div id="alternative">
+      <form id="file-chooser">
+        <p>Want to use a file input instead?</p>
+        <div>
+          <input name="source-file" id="source-file" type="file" />
+        </div>
+        <div>
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div id="time"></div>
   <div id="artist-track">

@@ -34,10 +34,10 @@ function MusicDNA() {
     audioParser.getAnalyserAudioData(audioData);
     audioTime = audioParser.getTime() / audioDuration;
 
-    time.style.width = (audioTime * 100).toFixed(1) + '%';
-
-    if (audioPlaying)
+    if (audioPlaying) {
       audioRenderer.render(audioData, audioTime);
+      time.style.width = (audioTime * 100).toFixed(1) + '%';
+    }
 
     if (!audioPlaying || audioTime <= 1) {
       requestAnimFrame(updateAndRender);
