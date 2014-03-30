@@ -70,5 +70,3 @@ function AudioParser(dataSize) {
   };
 
 }
-
-var audioContext = new AudioContext();
