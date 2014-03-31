@@ -56,9 +56,9 @@ window.requestAnimFrame =
     ID3.loadTags("filename.mp3", function() {
       var tags = ID3.getAllTags("filename.mp3");
       if (tags.artist)
-        artist.innerText = tags.artist;
+        artist.textContent = tags.artist;
       if (tags.title)
-        track.innerText = tags.title;
+        track.textContent = tags.title;
     }, {
       dataReader: FileAPIReader(file)
     });
