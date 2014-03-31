@@ -16,7 +16,7 @@ function AudioParser(dataSize) {
 
   var audioContext = new AudioContext();
   var analyser = audioContext.createAnalyser();
-  var gainNode = audioContext.createGainNode();
+  var gainNode = audioContext.createGain();
   var sourceNode = null;
   var audioRenderer = null;
   var audioDecodedCallback = null;
@@ -51,7 +51,7 @@ function AudioParser(dataSize) {
 
     // Set it up and play it
     sourceNode.buffer = buffer;
-    sourceNode.noteOn(0);
+    sourceNode.start();
 
     timePlaybackStarted = Date.now();
 
