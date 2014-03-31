@@ -16,8 +16,8 @@ function AudioParser(dataSize) {
 
   var audioContext = new AudioContext();
   var analyser = audioContext.createAnalyser();
+  var gainNode = audioContext.createGainNode();
   var sourceNode = null;
-  var gainNode = null;
   var audioRenderer = null;
   var audioDecodedCallback = null;
   var timePlaybackStarted = 0;
@@ -25,26 +25,33 @@ function AudioParser(dataSize) {
   analyser.smoothingTimeConstant = 0.2;
   analyser.fftSize = dataSize;
 
+  gainNode.gain.value = 0.5;
+
   function onDecodeData (buffer) {
 
+    // Kill any existing audio
+    if (sourceNode) {
+      if (sourceNode.playbackState === sourceNode.PLAYING_STATE)
+        sourceNode.stop();
+
+      sourceNode.disconnect(gainNode);
+      sourceNode = null;
+    }
+
+    // Make a new source
     if (!sourceNode) {
 
       sourceNode = audioContext.createBufferSource();
-      gainNode = audioContext.createGainNode();
-
       sourceNode.loop = false;
 
       sourceNode.connect(gainNode);
       gainNode.connect(analyser);
       analyser.connect(audioContext.destination);
-
-      gainNode.gain.value = 0.5;
     }
 
+    // Set it up and play it
     sourceNode.buffer = buffer;
-
-    if (timePlaybackStarted === 0)
-      sourceNode.noteOn(0);
+    sourceNode.noteOn(0);
 
     timePlaybackStarted = Date.now();
 

@@ -39,9 +39,7 @@ function MusicDNA() {
       time.style.width = (audioTime * 100).toFixed(1) + '%';
     }
 
-    if (!audioPlaying || audioTime <= 1) {
-      requestAnimFrame(updateAndRender);
-    }
+    requestAnimFrame(updateAndRender);
   }
 
   this.parse = function (file) {
