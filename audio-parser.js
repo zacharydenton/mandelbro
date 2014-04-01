@@ -34,7 +34,6 @@ function AudioParser(dataSize) {
       if (sourceNode.playbackState === sourceNode.PLAYING_STATE)
         sourceNode.stop();
 
-      sourceNode.disconnect(gainNode);
       sourceNode = null;
     }
 
