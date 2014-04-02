@@ -10,7 +10,7 @@ window.AudioContext =
   window.oAudioContext ||
   window.AudioContext;
 
-function AudioParser(dataSize) {
+function AudioParser(dataSize, onAudioDataDecoded) {
 
   "use strict";
 
@@ -26,6 +26,7 @@ function AudioParser(dataSize) {
   analyser.fftSize = dataSize;
 
   gainNode.gain.value = 0.5;
+  audioDecodedCallback = onAudioDataDecoded;
 
   function onDecodeData (buffer) {
 
@@ -66,8 +67,7 @@ function AudioParser(dataSize) {
     analyser.getByteFrequencyData(arrayBuffer);
   };
 
-  this.parseArrayBuffer = function (arrayBuffer, onAudioDataDecoded) {
-    audioDecodedCallback = onAudioDataDecoded;
+  this.parseArrayBuffer = function (arrayBuffer) {
     audioContext.decodeAudioData(arrayBuffer, onDecodeData, onError);
   };
 

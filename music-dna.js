@@ -9,7 +9,7 @@ function MusicDNA() {
 
   var DATA_SIZE = 1024;
 
-  var audioParser = new AudioParser(DATA_SIZE);
+  var audioParser = new AudioParser(DATA_SIZE, onAudioDataParsed);
   var audioRenderer = new AudioRenderer();
   var audioData = new Uint8Array(DATA_SIZE);
   var audioDuration = 1;
@@ -18,7 +18,7 @@ function MusicDNA() {
   var time = document.getElementById('time');
 
   function onFileRead(event) {
-    audioParser.parseArrayBuffer(event.target.result, onAudioDataParsed);
+    audioParser.parseArrayBuffer(event.target.result);
   }
 
   function onAudioDataParsed(buffer) {
