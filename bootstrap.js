@@ -59,6 +59,8 @@ window.requestAnimFrame =
         artist.textContent = tags.artist;
       if (tags.title)
         track.textContent = tags.title;
+
+      musicDNA.setName(tags.artist + ' - ' + tags.title);
     }, {
       dataReader: FileAPIReader(file)
     });

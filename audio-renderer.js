@@ -17,15 +17,24 @@ function AudioRenderer() {
   var width = 0;
   var height = 0;
   var outerRadius = 0;
+  var renderData = {
+    width: 0,
+    height: 0,
+    values: [],
+    radius: 0
+  };
 
   function onResize() {
     width = canvas.offsetWidth;
     height = canvas.offsetHeight;
+    outerRadius = Math.min(width, height) * 0.47;
 
     canvas.width = width;
     canvas.height = height;
 
-    outerRadius = Math.min(width, height) * 0.47;
+    renderData.width = width;
+    renderData.height = height;
+    renderData.radius = outerRadius;
 
     ctx.globalCompositeOperation = "lighter";
 
@@ -37,6 +46,7 @@ function AudioRenderer() {
 
   this.clear = function() {
     ctx.clearRect(0, 0, width, height);
+    renderData.values.length = 0;
   };
 
   this.render = function(audioData, normalizedPosition) {
@@ -61,7 +71,7 @@ function AudioRenderer() {
 
       volume = audioData[a] / 255;
 
-      if (volume < 0.75)
+      if (volume < 0.73)
         continue;
 
       color = normalizedPosition - 0.12 + Math.random() * 0.24;
@@ -77,18 +87,30 @@ function AudioRenderer() {
         volume *= Math.random() * 0.25;
       }
 
-      ctx.globalAlpha = volume * 0.09;
-      ctx.fillStyle = 'hsl(' + color + ', 80%, 50%)';
+      var renderVals = {
+        alpha: volume * 0.09,
+        color: color,
+        x: x * distance,
+        y: y * distance,
+        size: size
+      };
+
+      ctx.globalAlpha = renderVals.alpha;
+      ctx.fillStyle = 'hsl(' + renderVals.color + ', 80%, 50%)';
       ctx.beginPath();
       ctx.arc(
-        midX + x * distance,
-        midY + y * distance,
-        size, 0, TAU, false);
+        midX + renderVals.x,
+        midY + renderVals.y,
+        renderVals.size, 0, TAU, false);
       ctx.closePath();
       ctx.fill();
+
+      renderData.values.push(renderVals);
     }
+  };
 
-
+  this.getRenderData = function() {
+    return renderData;
   };
 
   window.addEventListener('resize', onResize, false);

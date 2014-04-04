@@ -85,6 +85,137 @@
       line-height: 1;
     }
 
+    #save-and-download {
+      width: 100%;
+      height: 100px;
+      position: absolute;
+      left: 0%;
+      top: 0;
+      border-bottom: 1px solid #003040;
+      background: #090909;
+      padding: 0;
+      text-align: center;
+
+      -webkit-transform: translateY(-101px);
+      -moz-transform: translateY(-101px);
+      -ms-transform: translateY(-101px);
+      -o-transform: translateY(-101px);
+      transform: translateY(-101px);
+
+      -webkit-transition: -webkit-transform 300ms ease-out;
+      -moz-transition: -moz-transform 300ms ease-out;
+      -ms-transition: -ms-transform 300ms ease-out;
+      -o-transition: -o-transform 300ms ease-out;
+      transition: transform 300ms ease-out;;
+    }
+
+    #save-and-download.visible {
+      -webkit-transform: translateY(0);
+      -moz-transform: translateY(0);
+      -ms-transform: translateY(0);
+      -o-transform: translateY(0);
+      transform: translateY(0);
+
+    }
+
+    #save-and-download h1 {
+      font-family: 'Roboto';
+      font-weight: 700;
+      font-size: 21px;
+      text-align: center;
+      line-height: 1;
+      display: block;
+      color: #FFF;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 14px 0 0 0;
+    }
+
+    #save-and-download-buttons {
+      padding-top: 13px;
+      text-align: center;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #save-and-download-buttons.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #save-and-download button,
+    #save-and-download a {
+      display: inline-block;
+      font-family: 'Roboto';
+      height: 25px;
+      padding: 0 10px;
+      line-height: 25px;
+      background: #00A3D9;
+      border-radius: 3px;
+      font-size: 13px;
+      border: none;
+      text-shadow: 0 1px 1px #004C66;
+      color: #FFF;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+
+    #save-and-download-buttons button:hover {
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #generate-progress {
+      width: 314px;
+      height: 21px;
+      padding: 1px;
+      border: 1px solid #FFF;
+      position: absolute;
+      left: 50%;
+      margin: -24px 0 0 -158px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #generate-progress.visible {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    #generate-bar {
+      height: 21px;
+      width: 0%;
+      background: #00B2B2;
+    }
+
+    #save {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+    }
+
+    #save-and-download a#get-download {
+      position: absolute;
+      bottom: 27px;
+      left: 50%;
+      width: 100px;
+      margin: 0 0 0 -60px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #save-and-download a#get-download.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #status {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      color: #FFF;
+    }
+
     form {
       position: absolute;
       left: 50%;
@@ -126,9 +257,23 @@
     <div id="track"></div>
   </div>
 
+  <div id="save-and-download">
+    <h1>Download DNA</h1>
+    <div id="save-and-download-buttons">
+      <button id="save-normal">Normal</button>
+      <button id="save-large">Large</button>
+      <button id="save-enormous">Enormous</button>
+    </div>
+    <div id="generate-progress">
+      <div id="generate-bar"></div>
+    </div>
+    <a id="get-download">Download</a>
+  </div>
+
   <script src="id3.js"></script>
   <script src="audio-parser.js"></script>
   <script src="audio-renderer.js"></script>
+  <script src="audio-renderer-hi-res.js"></script>
   <script src="music-dna.js"></script>
   <script src="bootstrap.js"></script>
 </body>
