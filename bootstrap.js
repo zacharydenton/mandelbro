@@ -12,7 +12,7 @@ window.requestAnimFrame =
 
 (function() {
 
-  var musicDNA = new MusicDNA();
+  var mandelbro = new Mandelbro();
   var fileDropArea = document.getElementById('file-drop-area');
   var artist = document.getElementById('artist');
   var track = document.getElementById('track');
@@ -50,7 +50,7 @@ window.requestAnimFrame =
   }
 
   function go(file) {
-    musicDNA.parse(file);
+    mandelbro.parse(file);
     fileDropArea.classList.add('dropped');
 
     ID3.loadTags("filename.mp3", function() {
@@ -60,7 +60,7 @@ window.requestAnimFrame =
       if (tags.title)
         track.textContent = tags.title;
 
-      musicDNA.setName(tags.artist + ' - ' + tags.title);
+      mandelbro.setName(tags.artist + ' - ' + tags.title);
     }, {
       dataReader: FileAPIReader(file)
     });

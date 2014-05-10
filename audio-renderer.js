@@ -4,117 +4,69 @@
  */
 
 function AudioRenderer() {
-  "use strict";
+	"use strict";
 
-  var LOG_MAX = Math.log(128);
-  var TAU = Math.PI * 2;
-  var MAX_DOT_SIZE = 0.5;
-  var BASE = Math.log(4) / LOG_MAX;
+	var LOG_MAX = Math.log(128);
+	var TAU = Math.PI * 2;
+	var MAX_DOT_SIZE = 0.5;
+	var BASE = Math.log(4) / LOG_MAX;
+	var DELTA = 0.01;
 
-  var canvas = document.getElementById('render-area');
-  var ctx = canvas.getContext('2d');
+	var scene = new THREE.Scene();
+	var camera = new THREE.OrthographicCamera(-window.innerWidth / 2,
+			window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2,
+			-1000, 1000);
+	camera.position.z = 100;
 
-  var width = 0;
-  var height = 0;
-  var outerRadius = 0;
-  var renderData = {
-    width: 0,
-    height: 0,
-    values: [],
-    radius: 0
-  };
+	var material = new THREE.ShaderMaterial({
+		uniforms: { 
+			time: { type: "f", value: 0.0 },
+			resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+			mouse: { type: "v2", value: new THREE.Vector2(0.5, 0.5) }
+		},
+		vertexShader: document.getElementById( 'vertexShader' ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader' ).textContent
 
-  function onResize() {
-    width = canvas.offsetWidth;
-    height = canvas.offsetHeight;
-    outerRadius = Math.min(width, height) * 0.47;
+	});
+	var plane = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+	var quad = new THREE.Mesh(plane, material);
+	quad.position.z = -100;
+	scene.add(quad);
 
-    canvas.width = width;
-    canvas.height = height;
+	var renderer = new THREE.WebGLRenderer();
+	document.getElementById('render-area').appendChild(renderer.domElement);
 
-    renderData.width = width;
-    renderData.height = height;
-    renderData.radius = outerRadius;
+	function onResize() {
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	}
 
-    ctx.globalCompositeOperation = "lighter";
+	function clamp(val, min, max) {
+		return Math.min(max, Math.max(val, min));
+	}
 
-  }
+	this.clear = function() {
+		renderer.clear();
+	};
 
-  function clamp(val, min, max) {
-    return Math.min(max, Math.max(val, min));
-  }
+	this.render = function(audioData, normalizedPosition) {
+		var time = Date.now() * 0.0015;
 
-  this.clear = function() {
-    ctx.clearRect(0, 0, width, height);
-    renderData.values.length = 0;
-  };
+		camera.lookAt(scene.position);
 
-  this.render = function(audioData, normalizedPosition) {
+		if ( material.uniforms.time.value > 1 || material.uniforms.time.value < 0 ) {
+			DELTA *= -1;
+		}
 
-    var angle = Math.PI - normalizedPosition * TAU;
-    var color = 0;
-    var lnDataDistance = 0;
-    var distance = 0;
-    var size = 0;
-    var volume = 0;
-    var power = 0;
+		material.uniforms.time.value += DELTA;
 
-    var x = Math.sin(angle);
-    var y = Math.cos(angle);
-    var midX = width * 0.5;
-    var midY = height * 0.5;
+		renderer.clear();
 
-    // There is so much number hackery in here.
-    // Number fishing is HOW YOU WIN AT LIFE.
+		// Render full screen quad with shader
+		renderer.render( scene, camera );
+	};
 
-    for (var a = 16; a < audioData.length; a++) {
-
-      volume = audioData[a] / 255;
-
-      if (volume < 0.73)
-        continue;
-
-      color = normalizedPosition - 0.12 + Math.random() * 0.24;
-      color = Math.round(color * 360);
-
-      lnDataDistance = (Math.log(a - 4) / LOG_MAX) - BASE;
-
-      distance = lnDataDistance * outerRadius;
-      size = volume * MAX_DOT_SIZE + Math.random() * 2;
-
-      if (Math.random() > 0.995) {
-        size *= (audioData[a] * 0.2) * Math.random();
-        volume *= Math.random() * 0.25;
-      }
-
-      var renderVals = {
-        alpha: volume * 0.09,
-        color: color,
-        x: x * distance,
-        y: y * distance,
-        size: size
-      };
-
-      ctx.globalAlpha = renderVals.alpha;
-      ctx.fillStyle = 'hsl(' + renderVals.color + ', 80%, 50%)';
-      ctx.beginPath();
-      ctx.arc(
-        midX + renderVals.x,
-        midY + renderVals.y,
-        renderVals.size, 0, TAU, false);
-      ctx.closePath();
-      ctx.fill();
-
-      renderData.values.push(renderVals);
-    }
-  };
-
-  this.getRenderData = function() {
-    return renderData;
-  };
-
-  window.addEventListener('resize', onResize, false);
-  window.addEventListener('load', function() {
-    onResize();
-  }, false);
+	window.addEventListener('resize', onResize, false);
+	window.addEventListener('load', function() {
+		onResize();
+	}, false);
 }
