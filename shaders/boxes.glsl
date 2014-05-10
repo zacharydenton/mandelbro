@@ -80,12 +80,12 @@ void main(void)
 		pos.x += 0.24*sign(pos.x); // move aside
 		if (abs(pos.x) < 0.1) pos.x++; // stupid fix; sign sometimes returns 0
 		
-		vec2 size = 1.8*z*vec2(0.04, 0.04 + 0.1*rand(tick+0.2));
-		float b = box(uv-pos, size, 0.01);
-		float dust = z*smoothstep(0.22, 0.0, b)*pulse*0.5;
+		vec2 size = 1.8*z*vec2(0.04, 0.04 + 0.1*rand(tick+0.2)) * 1.5 * (upperMid + lowerMid);
+		float b = box(uv-pos, size, 0.01) * cos(lowerMid);
+		float dust = z*smoothstep(0.22, 0.0, b)* pulse*0.5 * volume;
 		#ifdef SHOW_BLOCKS
-		float block = 0.2*z*smoothstep(0.002, 0.0, b);
-		float shine = 0.6*z*pulse*smoothstep(-0.002, b, 0.007);
+		float block = 0.2*z*smoothstep(0.002, 0.0, b) * sin(upperMid);
+		float shine = 0.6*z*pulse*smoothstep(-0.002, b, 0.007) * sin(beat) * bass;
 		color += dust*baseColor + block*z + shine;
 		#else
 		color += dust*baseColor;
