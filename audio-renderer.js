@@ -56,7 +56,11 @@ function AudioRenderer() {
 
 	function onMouseMove() {
 		mouseDx = event.clientX / window.innerWidth - 0.5;
-		mouseDy = event.clientY / window.innerHeight - 0.5;
+		mouseDy = 0.5 - event.clientY / window.innerHeight;
+	}
+
+	function onScroll() {
+		uniforms.offset.value.z += OFFSET_DELTA * event.wheelDelta;
 	}
 
 	function clamp(val, min, max) {
@@ -100,6 +104,7 @@ function AudioRenderer() {
 
 	window.addEventListener('resize', onResize, false);
 	window.addEventListener('mousemove', onMouseMove, false);
+	window.addEventListener('mousewheel', onScroll, false);
 	window.addEventListener('load', function() {
 		onResize();
 	}, false);
