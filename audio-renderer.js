@@ -87,8 +87,7 @@ function AudioRenderer() {
 	function onKeyPress() {
 		if (event.keyCode === 32) {
 			// spacebar pressed
-			var nextShader = SHADERS[Math.floor(Math.random() * SHADERS.length)];
-			loadShader(nextShader);
+			loadRandomShader();
 		}
 	}
 
@@ -126,12 +125,17 @@ function AudioRenderer() {
 
 	function loadShader(name) {
 		var xhr = new XMLHttpRequest();
-		xhr.open('GET', "shaders/" + name + ".glsl", true);
+		xhr.open('GET', "shaders/" + name + ".glsl?" + Date.now(), true);
 		xhr.onload = function() {
 			material.fragmentShader = xhr.responseText;
 			material.needsUpdate = true;
 		};
 		xhr.send();
+	}
+
+	function loadRandomShader() {
+		var nextShader = SHADERS[Math.floor(Math.random() * SHADERS.length)];
+		loadShader(nextShader);
 	}
 
 	this.clear = function() {
@@ -167,6 +171,7 @@ function AudioRenderer() {
 	window.addEventListener('mousewheel', onScroll, false);
 	window.addEventListener('keypress', onKeyPress, false);
 	window.addEventListener('load', function() {
+		loadRandomShader();
 		onResize();
 	}, false);
 }

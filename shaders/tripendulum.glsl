@@ -26,20 +26,20 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-#define N 60
+#define N 90
 void main( void ) {
 	vec2 v = (gl_FragCoord.xy - resolution/2.0) / min(resolution.y,resolution.x) * 20.0;
 	
 	float rsum = 0.0;
 	float pi2 = 3.1415926535 * 2.0;
-	float a = (.5-offset.x)*pi2;
+	float a = (.5-offset.x * 0.1)*pi2;
 	float C = cos(a);
 	float S = sin(a);
 	vec2 xaxis=vec2(C, -S);
 	vec2 yaxis=vec2(S, C);
 	#define MAGIC 0.618
 	vec2 shift = vec2( 0, 1.0+MAGIC);
-	float zoom = 1.0 + offset.z;
+	float zoom = 1.0 + offset.y * 0.1;
 	
 	for ( int i = 0; i < N; i++ ){
 		float rr = dot(v,v);
