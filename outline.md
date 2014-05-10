@@ -70,3 +70,32 @@ Shader List
 -   <http://glsl.heroku.com/e#11208.1>
 
   [base code]: https://github.com/paullewis/music-dna
+
+Shader Variables
+----------------
+
+float speed
+vec3 offset (offset.x, offset.y, offset.z)
+float beat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
