@@ -13,6 +13,21 @@ function AudioRenderer() {
 	var DELTA = 0.01;
 	var OFFSET_DELTA = 0.01;
 
+	var shaders = [
+		"boxes",
+		"fractal",
+		"mandelbrot",
+		"pendulum",
+		"sinewaves",
+		"tripendulum",
+		"dyson-sphere",
+		"lightbeam",
+		"monjori",
+		"pulsating_wave",
+		"stringy",
+		"tunnel"
+	];
+
 	var scene = new THREE.Scene();
 	var camera = new THREE.OrthographicCamera(-window.innerWidth / 2,
 			window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2,
@@ -35,7 +50,6 @@ function AudioRenderer() {
 		},
 		vertexShader: document.getElementById( 'vertexShader' ).textContent,
 		fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-
 	});
 	var uniforms = material.uniforms;
 	var plane = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
@@ -70,6 +84,14 @@ function AudioRenderer() {
 		uniforms.offset.value.z += OFFSET_DELTA * event.wheelDelta;
 	}
 
+	function onKeyPress() {
+		if (event.keyCode === 32) {
+			// spacebar pressed
+			var nextShader = shaders[Math.floor(Math.random() * shaders.length)];
+			loadShader(nextShader);
+		}
+	}
+
 	function clamp(val, min, max) {
 		return Math.min(max, Math.max(val, min));
 	}
@@ -94,6 +116,16 @@ function AudioRenderer() {
 			prevValue += sign * maxStep;
 			return prevValue;
 		}
+	}
+
+	function loadShader(name) {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "shaders/" + name + ".glsl", true);
+		xhr.onload = function() {
+			material.fragmentShader = xhr.responseText;
+			material.needsUpdate = true;
+		};
+		xhr.send();
 	}
 
 	this.clear = function() {
@@ -127,6 +159,7 @@ function AudioRenderer() {
 	window.addEventListener('resize', onResize, false);
 	window.addEventListener('mousemove', onMouseMove, false);
 	window.addEventListener('mousewheel', onScroll, false);
+	window.addEventListener('keypress', onKeyPress, false);
 	window.addEventListener('load', function() {
 		onResize();
 	}, false);
