@@ -238,10 +238,7 @@ form div {
 }
 </style>
 <script id="vertexShader" type="x-shader/x-vertex">
-varying vec2 vUv;
-
 void main() {
-	vUv = uv;
 	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
 </script>
@@ -270,17 +267,17 @@ void main(void)
 	vec2 vScreen=resolution;
 	vec2 vMouse=vec2(0.1,0.1)+offset.xy;
 
-	float fTime=time*100.0*0.5;
+	float fTime=time*1000.0*0.5;
 
 	vec2 p=-1.0+2.0*vPixel/vScreen;
 
 	float a=fTime* 40.0;
-	float d,e,f,g=volume/40.0,h,i,r,q;
+	float d,e,f,g=bass/40.0,h,i,r,q;
 
-	e=(bass*40.0)*(p.x*0.5);
-	f=(lowerMid*40.0)*(p.y*0.5);
-	i=(upperMid*20.0)+sin(e*g+a/10.0)*20.0;
-	d=(highEnd*20.0)+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
+	e=(200.0)*(p.x*0.5);
+	f=(200.0)*(p.y*0.5);
+	i=(100.0)+sin(e*g+a/10.0)*20.0;
+	d=(100.0)+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
 	r=sqrt(pow(i-e,2.0)+pow(d-f,2.0));
 	q=f/r;
 	e=(r*cos(q))-a/2.0;f=(r*sin(q))-a/2.0;

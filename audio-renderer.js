@@ -68,14 +68,15 @@ function AudioRenderer() {
 	this.render = function(audioData, normalizedPosition) {
 		uniforms.time.value = normalizedPosition;
 
-		var bassEnd = audioData.length / 16;
-		var lowerEnd = bassEnd + audioData.length / 8;
-		var upperEnd = lowerEnd + audioData.length / 4;
+		var bassEnd = audioData.length / 32;
+		var lowerEnd = bassEnd + audioData.length / 16;
+		var upperEnd = lowerEnd + audioData.length / 8;
+		var highEnd = upperEnd + audioData.length / 4;
 
-		var bass = uniforms.bass.value = average(audioData.subarray(0, bassEnd));
-		var lower = uniforms.lowerMid.value = average(audioData.subarray(bassEnd, lowerEnd));
-		var upper = uniforms.upperMid.value = average(audioData.subarray(lowerEnd, upperEnd));
-		var high = uniforms.highEnd.value = average(audioData.subarray(upperEnd));
+		var bass = uniforms.bass.value = average(audioData.subarray(0, bassEnd)) / 255;
+		var lower = uniforms.lowerMid.value = average(audioData.subarray(bassEnd, lowerEnd)) / 255;
+		var upper = uniforms.upperMid.value = average(audioData.subarray(lowerEnd, upperEnd)) / 255;
+		var high = uniforms.highEnd.value = average(audioData.subarray(upperEnd, highEnd)) / 255;
 
 		uniforms.beat.value = bass;
 		uniforms.volume.value = average([bass, lower, upper, high]);
