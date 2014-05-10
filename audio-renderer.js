@@ -103,13 +103,19 @@ function AudioRenderer() {
 		return sum / vals.length;
 	}
 
-	function smooth(maxStep) {
+	function smooth(maxStep, minStep) {
 		if (maxStep === undefined) {
 			maxStep = 0.1;
 		}
+		if (minStep === undefined) {
+			minStep = 0.005;
+		}
 		var prevValue = 0;
 		return function(value) {
-			if (Math.abs(value - prevValue) < maxStep) {
+			if (Math.abs(value - prevValue) < minStep) {
+				return prevValue;
+			} else if (Math.abs(value - prevValue) < maxStep) {
+				prevValue = value;
 				return value;
 			}
 			var sign = (value > prevValue) ? 1 : -1;
