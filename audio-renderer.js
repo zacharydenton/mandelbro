@@ -12,8 +12,7 @@ function AudioRenderer() {
 	var BASE = Math.log(4) / LOG_MAX;
 	var DELTA = 0.01;
 	var OFFSET_DELTA = 0.01;
-
-	var shaders = [
+	var SHADERS = [
 		"boxes",
 		"fractal",
 		"mandelbrot",
@@ -25,7 +24,8 @@ function AudioRenderer() {
 		"monjori",
 		"pulsating_wave",
 		"stringy",
-		"tunnel"
+		"tunnel",
+		"colordots"
 	];
 
 	var scene = new THREE.Scene();
@@ -87,7 +87,7 @@ function AudioRenderer() {
 	function onKeyPress() {
 		if (event.keyCode === 32) {
 			// spacebar pressed
-			var nextShader = shaders[Math.floor(Math.random() * shaders.length)];
+			var nextShader = SHADERS[Math.floor(Math.random() * SHADERS.length)];
 			loadShader(nextShader);
 		}
 	}
