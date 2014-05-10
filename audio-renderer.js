@@ -43,6 +43,13 @@ function AudioRenderer() {
 	quad.position.z = -100;
 	scene.add(quad);
 
+	var volumeSmooth = smooth();
+	var beatSmooth = smooth();
+	var bassSmooth = smooth();
+	var lowerSmooth = smooth();
+	var upperSmooth = smooth();
+	var highSmooth = smooth();
+
 	var mouseDx = 0.0;
 	var mouseDy = 0.0;
 
@@ -74,6 +81,21 @@ function AudioRenderer() {
 		return sum / vals.length;
 	}
 
+	function smooth(maxStep) {
+		if (maxStep === undefined) {
+			maxStep = 0.1;
+		}
+		var prevValue = 0;
+		return function(value) {
+			if (Math.abs(value - prevValue) < maxStep) {
+				return value;
+			}
+			var sign = (value > prevValue) ? 1 : -1;
+			prevValue += sign * maxStep;
+			return prevValue;
+		}
+	}
+
 	this.clear = function() {
 		renderer.clear();
 	};
@@ -88,13 +110,13 @@ function AudioRenderer() {
 		var upperEnd = lowerEnd + audioData.length / 8;
 		var highEnd = upperEnd + audioData.length / 4;
 
-		var bass = uniforms.bass.value = average(audioData.subarray(0, bassEnd)) / 255;
-		var lower = uniforms.lowerMid.value = average(audioData.subarray(bassEnd, lowerEnd)) / 255;
-		var upper = uniforms.upperMid.value = average(audioData.subarray(lowerEnd, upperEnd)) / 255;
-		var high = uniforms.highEnd.value = average(audioData.subarray(upperEnd, highEnd)) / 255;
+		var bass = uniforms.bass.value = bassSmooth(average(audioData.subarray(0, bassEnd)) / 255);
+		var lower = uniforms.lowerMid.value = lowerSmooth(average(audioData.subarray(bassEnd, lowerEnd)) / 255);
+		var upper = uniforms.upperMid.value = upperSmooth(average(audioData.subarray(lowerEnd, upperEnd)) / 255);
+		var high = uniforms.highEnd.value = highSmooth(average(audioData.subarray(upperEnd, highEnd)) / 255);
 
-		uniforms.beat.value = bass;
-		uniforms.volume.value = average([bass, lower, upper, high]);
+		uniforms.beat.value = beatSmooth(bass);
+		uniforms.volume.value = volumeSmooth(average([bass, lower, upper, high]));
 
 		renderer.clear();
 
