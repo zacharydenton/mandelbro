@@ -276,9 +276,15 @@ void main(void)
 
 	int iters = 0;
 	z = c;
+	float minMag = 999999.0;
 	for(int i=0; i<150; i++) {
 		float x = (z.x * z.x - z.y * z.y) + c.x;
 		float y = (z.y * z.x + z.x * z.y) + c.y;
+
+		float mag = length(z);
+		if (mag < minMag) {
+			minMag = mag;
+		}
 
 		if((x * x + y * y) > 4.0) {
 			iters = i;
@@ -291,9 +297,8 @@ void main(void)
 	if (iters == 150) {
 		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 	} else {
-		float center = mod(time / 10.0, 1.0);
-		float m = float(iters) / 150.0;
-		gl_FragColor = vec4(hsv2rgb(vec3(center + (upperMid * 0.5) * m, volume, m)), 1.0);
+		float center = mod(time / 30.0, 1.0);
+		gl_FragColor = vec4(hsv2rgb(vec3(center + bass * 0.5 * minMag, 1.0 - (0.5 * volume), 1.0 - minMag)), 1.0);
 	}
 }
 </script>
