@@ -13,31 +13,25 @@ uniform float lowerMid; // float in range 0-1 measuring lower midrange volume (1
 uniform float upperMid; // float in range 0-1 measuring upper midrange volume (600-2000 hz)
 uniform float highEnd; // float in range 0-1 measuring high end volume (2000-20000 hz)
 
-
-uniform sampler2D backbuffer;
 #define PI 3.14159
 
-float rand(vec2 co){ 
-	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453); 
-}
-
 void main(){
-
-	float speed = sin(time)*0.001 + 0.5;
 	vec2 p = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+	
 	vec2 t = vec2(gl_FragCoord.xy / resolution);
 	
 	vec3 c = vec3(0);
 	
 	for(int i = 0; i < 30; i++) {
-		float t = 0.1 * PI * float(i+1) / 50.0 * time * speed;
-		float x = cos(5.0*t)*beat + offset.x*sin(t) + lowerMid - upperMid;
-		float y = sin(20.0*fract(t))*beat*volume*2. + offset.y*sin(t) + bass - highEnd;
+		float t = 0.1 * PI * float(i+1) / 50.0 * time;
+		float x = cos(5.0*t)*sin(volume)*resolution.x/100.*bass;
+		float y = sin(20.0*fract(t)) * volume *beat *lowerMid *upperMid *highEnd *bass*10.;
 		vec2 o = 0.30 * vec2(x, y);
 		float r = fract(x-y*t);
 		float g = 0.5 - r;
-		c += 0.01 / (length(sin(p)-o)) * vec3(r, g, 0.8);
+		c += 0.01 / (length(sin(p)-o)) * vec3(r, g, sin(lowerMid));
 	}
 	
 	gl_FragColor = vec4(c, 1);
+
 }
