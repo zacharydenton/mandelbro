@@ -4,29 +4,35 @@
 precision mediump float;
 #endif
 
-uniform vec2 resolution;
-uniform vec2 mouse;
-
-uniform float time;
+uniform float time; // float in range 0-1 representing normalized song position
+uniform vec2 resolution; // vector with screen resolution (x pixels, y pixels)
+uniform float speed; // to adjust animation speed (starts at 1.0)
+uniform vec3 offset; // (offset.x, offset.y, offset.z) to support panning/zoom (either with controller or mouse)
+uniform float volume; // float in range 0-1 measuring overall song volume
+uniform float beat; // close to 1.0 when the beat strikes, 0 off beat
+uniform float bass; // float in range 0-1 measuring bass volume (0-150 hz)
+uniform float lowerMid; // float in range 0-1 measuring lower midrange volume (150-600 hz)
+uniform float upperMid; // float in range 0-1 measuring upper midrange volume (600-2000 hz)
+uniform float highEnd; // float in range 0-1 measuring high end volume (2000-20000 hz)
 
 void main(void)
 {
 	vec2 vPixel=gl_FragCoord.xy;
 
 	vec2 vScreen=resolution;
-	vec2 vMouse=vec2(0.1,0.1)+mouse;
+	vec2 vMouse=vec2(0.1,0.1)+offset.xy;
 
-	float fTime=time*0.5;
+	float fTime=time*100.0*0.5;
 
 	vec2 p=-1.0+2.0*vPixel/vScreen;
 
-	float a=fTime*40.0;
-	float d,e,f,g=1.0/40.0,h,i,r,q;
+	float a=fTime* 40.0;
+	float d,e,f,g=volume/40.0,h,i,r,q;
 
-	e=(vMouse.x*400.0)*(p.x*0.5+0.5);
-	f=(vMouse.y*400.0)*(p.y*0.5+0.5);
-	i=(vMouse.x*200.0)+sin(e*g+a/150.0)*20.0;
-	d=(vMouse.y*200.0)+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
+	e=(bass*40.0)*(p.x*0.5);
+	f=(lowerMid*40.0)*(p.y*0.5);
+	i=(upperMid*20.0)+sin(e*g+a/10.0)*20.0;
+	d=(highEnd*20.0)+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
 	r=sqrt(pow(i-e,2.0)+pow(d-f,2.0));
 	q=f/r;
 	e=(r*cos(q))-a/2.0;f=(r*sin(q))-a/2.0;
