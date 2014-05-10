@@ -11,6 +11,7 @@ function AudioRenderer() {
 	var MAX_DOT_SIZE = 0.5;
 	var BASE = Math.log(4) / LOG_MAX;
 	var DELTA = 0.01;
+	var OFFSET_DELTA = 0.01;
 
 	var scene = new THREE.Scene();
 	var camera = new THREE.OrthographicCamera(-window.innerWidth / 2,
@@ -24,7 +25,7 @@ function AudioRenderer() {
 			time: { type: "f", value: 0.0 },
 			resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 			speed: { type: "f", value: 1.0 },
-			offset: { type: "v3", value: new THREE.Vector2(0, 0, 0) },
+			offset: { type: "v3", value: new THREE.Vector3(0, 0, 0) },
 			volume: { type: "f", value: 0.0 },
 			beat: { type: "f", value: 0.0 },
 			bass: { type: "f", value: 0.0 },
@@ -42,12 +43,20 @@ function AudioRenderer() {
 	quad.position.z = -100;
 	scene.add(quad);
 
+	var mouseDx = 0.0;
+	var mouseDy = 0.0;
+
 	var renderer = new THREE.WebGLRenderer();
 	document.getElementById('render-area').appendChild(renderer.domElement);
 
 	function onResize() {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+	}
+
+	function onMouseMove() {
+		mouseDx = event.clientX / window.innerWidth - 0.5;
+		mouseDy = event.clientY / window.innerHeight - 0.5;
 	}
 
 	function clamp(val, min, max) {
@@ -65,8 +74,10 @@ function AudioRenderer() {
 		renderer.clear();
 	};
 
-	this.render = function(audioData, normalizedPosition) {
-		uniforms.time.value = normalizedPosition;
+	this.render = function(audioData, audioTime) {
+		uniforms.time.value = audioTime;
+		var mouseOffset = new THREE.Vector3(mouseDx, mouseDy, 0).multiplyScalar(OFFSET_DELTA);
+		uniforms.offset.value.add(mouseOffset);
 
 		var bassEnd = audioData.length / 32;
 		var lowerEnd = bassEnd + audioData.length / 16;
@@ -88,6 +99,7 @@ function AudioRenderer() {
 	};
 
 	window.addEventListener('resize', onResize, false);
+	window.addEventListener('mousemove', onMouseMove, false);
 	window.addEventListener('load', function() {
 		onResize();
 	}, false);

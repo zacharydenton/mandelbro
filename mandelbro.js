@@ -40,7 +40,7 @@ function Mandelbro() {
     audioTime = audioParser.getTime() / audioDuration;
 
     if (audioPlaying) {
-      audioRenderer.render(audioData, audioTime);
+      audioRenderer.render(audioData, audioParser.getContextTime());
       time.style.width = (audioTime * 100).toFixed(1) + '%';
     }
 
