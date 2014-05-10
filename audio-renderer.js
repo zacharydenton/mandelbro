@@ -17,17 +17,26 @@ function AudioRenderer() {
 			window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2,
 			-1000, 1000);
 	camera.position.z = 100;
+	camera.lookAt(scene.position);
 
 	var material = new THREE.ShaderMaterial({
 		uniforms: { 
 			time: { type: "f", value: 0.0 },
 			resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-			mouse: { type: "v2", value: new THREE.Vector2(0.5, 0.5) }
+			speed: { type: "f", value: 1.0 },
+			offset: { type: "v3", value: new THREE.Vector2(0, 0, 0) },
+			volume: { type: "f", value: 0.0 },
+			beat: { type: "f", value: 0.0 },
+			bass: { type: "f", value: 0.0 },
+			lowerMid: { type: "f", value: 0.0 },
+			upperMid: { type: "f", value: 0.0 },
+			highEnd: { type: "f", value: 0.0 }
 		},
 		vertexShader: document.getElementById( 'vertexShader' ).textContent,
 		fragmentShader: document.getElementById( 'fragmentShader' ).textContent
 
 	});
+	var uniforms = material.uniforms;
 	var plane = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
 	var quad = new THREE.Mesh(plane, material);
 	quad.position.z = -100;
@@ -38,10 +47,18 @@ function AudioRenderer() {
 
 	function onResize() {
 		renderer.setSize(window.innerWidth, window.innerHeight);
+		uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
 	}
 
 	function clamp(val, min, max) {
 		return Math.min(max, Math.max(val, min));
+	}
+
+	function average(vals) {
+		var sum = 0;
+		for (var i = 0, l = vals.length; i < l; i++)
+			sum += vals[i];
+		return sum / vals.length;
 	}
 
 	this.clear = function() {
@@ -49,15 +66,8 @@ function AudioRenderer() {
 	};
 
 	this.render = function(audioData, normalizedPosition) {
-		var time = Date.now() * 0.0015;
-
-		camera.lookAt(scene.position);
-
-		if ( material.uniforms.time.value > 1 || material.uniforms.time.value < 0 ) {
-			DELTA *= -1;
-		}
-
-		material.uniforms.time.value += DELTA;
+		uniforms.time.value = normalizedPosition;
+		uniforms.volume.value = average(audioData);
 
 		renderer.clear();
 
