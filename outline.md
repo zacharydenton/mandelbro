@@ -74,13 +74,13 @@ Shader List
 Shader Variables
 ----------------
 
-uniform float time; // float in range 0-1 representing normalized song position
-uniform vec2 resolution; // vector with screen resolution (x pixels, y pixels)
-uniform float speed; // to adjust animation speed (starts at 1.0)
-uniform vec3 offset; // (offset.x, offset.y, offset.z) to support panning/zoom (either with controller or mouse)
-uniform float volume; // float in range 0-1 measuring overall song volume
-uniform float beat; // close to 1.0 when the beat strikes, 0 off beat
-uniform float bass; // float in range 0-1 measuring bass volume (0-150 hz)
-uniform float lowerMid; // float in range 0-1 measuring lower midrange volume (150-600 hz)
-uniform float upperMid; // float in range 0-1 measuring upper midrange volume (600-2000 hz)
-uniform float highEnd; // float in range 0-1 measuring high end volume (2000-20000 hz)
+    uniform float time; // float in range 0-1 representing normalized song position
+    uniform vec2 resolution; // vector with screen resolution (x pixels, y pixels)
+    uniform float speed; // to adjust animation speed (starts at 1.0)
+    uniform vec3 offset; // (offset.x, offset.y, offset.z) to support panning/zoom (either with controller or mouse)
+    uniform float volume; // float in range 0-1 measuring overall song volume
+    uniform float beat; // close to 1.0 when the beat strikes, 0 off beat
+    uniform float bass; // float in range 0-1 measuring bass volume (0-150 hz)
+    uniform float lowerMid; // float in range 0-1 measuring lower midrange volume (150-600 hz)
+    uniform float upperMid; // float in range 0-1 measuring upper midrange volume (600-2000 hz)
+    uniform float highEnd; // float in range 0-1 measuring high end volume (2000-20000 hz)
