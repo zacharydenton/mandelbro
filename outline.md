@@ -77,7 +77,7 @@ Shader Variables
 float speed
 vec3 offset (offset.x, offset.y, offset.z)
 float beat
-
+float zoom 
 
 
 
