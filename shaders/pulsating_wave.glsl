@@ -25,7 +25,7 @@ void main(){
 	for(int i = 0; i < 30; i++) {
 		float t = 0.1 * PI * float(i+1) / 50.0 * time;
 		float x = clamp(offset.x, 0.6, 1.)*cos(5.0*t)*sin(volume)*resolution.x/100.*bass;
-		float y = clamp(offset.y,0.1,1.)*sin(20.0*fract(t)) * volume *beat *lowerMid *bass*10.;
+		float y = clamp(offset.y,0.3,0.8)*sin(20.0*fract(t)) * volume *beat *lowerMid *bass*10.;
 		vec2 o = 0.30 * vec2(x, y);
 		float r = fract(x-y*t);
 		float g = 0.5 - r;
