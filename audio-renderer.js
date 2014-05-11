@@ -12,6 +12,7 @@ function AudioRenderer() {
 	var BASE = Math.log(4) / LOG_MAX;
 	var DELTA = 0.01;
 	var OFFSET_DELTA = 0.01;
+	var DELTA_KBD = 0.01;
 	var OFFSET_MIDI = 0.001;
 	var SHADERS = [
 		"mandelbrot",
@@ -68,6 +69,8 @@ function AudioRenderer() {
 
 	var mouseDx = 0.0;
 	var mouseDy = 0.0;
+	var kbdDx = 0.0;
+	var kbdDy = 0.0;
 
 	var renderer = new THREE.WebGLRenderer();
 	document.getElementById('render-area').appendChild(renderer.domElement);
@@ -90,8 +93,32 @@ function AudioRenderer() {
 
 	function onKeyPress(e) {
 		if (e.keyCode === 32) {
-			// spacebar pressed
+			// spacebar
 			loadNextShader();
+		}
+	}
+
+	function onKeyDown(e) {
+		if (e.keyCode === 37 || e.keyCode === 65) {
+			// left
+			kbdDx = -1;
+		} else if (e.keyCode === 38 || e.keyCode === 87) {
+			// up
+			kbdDy = 1;
+		} else if (e.keyCode === 39 || e.keyCode === 68) {
+			// right
+			kbdDx = 1;
+		} else if (e.keyCode === 40 || e.keyCode === 83) {
+			// down
+			kbdDy = -1;
+		}
+	}
+
+	function onKeyUp(e) {
+		if (e.keyCode === 37 || e.keyCode === 65 || e.keyCode === 39 || e.keyCode === 68) {
+			kbdDx = 0;
+		} else if (e.keyCode === 38 || e.keyCode === 87 || e.keyCode === 40 || e.keyCode === 83) {
+			kbdDy = 0;
 		}
 	}
 
@@ -189,6 +216,8 @@ function AudioRenderer() {
 	this.render = function(audioData, audioTime) {
 		uniforms.time.value = audioTime;
 
+		var kbdOffset = new THREE.Vector3(kbdDx, kbdDy, 0).multiplyScalar(DELTA_KBD);
+		uniforms.offset.value.add(kbdOffset);
 		if (midiApi === null) {
 			var mouseOffset = new THREE.Vector3(mouseDx, mouseDy, 0).multiplyScalar(OFFSET_DELTA);
 			uniforms.offset.value.add(mouseOffset);
@@ -220,6 +249,8 @@ function AudioRenderer() {
 	window.addEventListener('mousemove', onMouseMove, false);
 	window.addEventListener('mousewheel', onScroll, false);
 	window.addEventListener('keypress', onKeyPress, false);
+	window.addEventListener('keyup', onKeyUp, false);
+	window.addEventListener('keydown', onKeyDown, false);
 	window.addEventListener('load', function() {
 		navigator.requestMIDIAccess().then(function(access) {
 			onMouseMove = function(){};
