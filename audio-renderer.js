@@ -13,12 +13,13 @@ function AudioRenderer() {
 	var DELTA = 0.01;
 	var OFFSET_DELTA = 0.01;
 	var SHADERS = [
+		"tripendulum",
+		"julia",
 		"boxes",
 		"fractal",
 		"mandelbrot",
 		"pendulum",
 		"sinewaves",
-		"tripendulum",
 		"dyson-sphere",
 		"lightbeam",
 		"monjori",
@@ -27,6 +28,7 @@ function AudioRenderer() {
 		"tunnel",
 		"colordots"
 	];
+	var shaderIndex = -1;
 
 	var scene = new THREE.Scene();
 	var camera = new THREE.OrthographicCamera(-window.innerWidth / 2,
@@ -87,7 +89,7 @@ function AudioRenderer() {
 	function onKeyPress(e) {
 		if (e.keyCode === 32) {
 			// spacebar pressed
-			loadRandomShader();
+			loadNextShader();
 		}
 	}
 
@@ -134,7 +136,15 @@ function AudioRenderer() {
 	}
 
 	function loadRandomShader() {
-		var nextShader = SHADERS[Math.floor(Math.random() * SHADERS.length)];
+		shaderIndex = Math.floor(Math.random() * SHADERS.length)
+		var nextShader = SHADERS[shaderIndex];
+		loadShader(nextShader);
+	}
+
+	function loadNextShader() {
+		shaderIndex += 1;
+		shaderIndex %= SHADERS.length;
+		var nextShader = SHADERS[shaderIndex];
 		loadShader(nextShader);
 	}
 
@@ -171,7 +181,7 @@ function AudioRenderer() {
 	window.addEventListener('mousewheel', onScroll, false);
 	window.addEventListener('keypress', onKeyPress, false);
 	window.addEventListener('load', function() {
-		loadRandomShader();
+		loadNextShader();
 		onResize();
 	}, false);
 }
