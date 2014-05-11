@@ -1,3 +1,4 @@
+
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -24,18 +25,18 @@ uniform float highEnd; // float in range 0-1 measuring high end volume (2000-200
 #define N 60
 void main( void ) {
 	vec2 v = (gl_FragCoord.xy - resolution/2.0) / min(resolution.y,resolution.x) * 20.0;
-	
+
 	float rsum = 0.0;
-	float pi2 = 3.1415926535 * 1.*(offset.z+offset.x+offset.y);
-	float a = (sin(time)/5.)*pi2;
-	float C = cos(a)*(5. + 20.*min(volume,lowerMid));
+	float pi2 = 3.1415926535 * 1.*clamp(offset.z+offset.x+offset.y, 3., 4.);
+	float a = (1./5.)*pi2;
+	float C = cos(a)*(5. + 20.*max(volume,lowerMid));
 	float S = sin(a)*5.;
 	vec2 xaxis=vec2(C, -S);
 	vec2 yaxis=vec2(S, C);
 	#define MAGIC 0.618
 	vec2 shift = vec2( 0, 1.0+MAGIC);
 	float zoom = 1.0 + time*8.0;
-	
+
 	for ( int i = 0; i < N; i++ ){
 		float rr = dot(v,v);
 		if ( rr > 1.0 )
@@ -46,7 +47,7 @@ void main( void ) {
 		}
 		rsum *= 1.01;
 		rsum += rr/10.;
-		
+
 		v = vec2( dot(v, xaxis), dot(v, yaxis)) + shift +offset.x + offset.y;
 	}
 	float col1 = fract(rsum);
