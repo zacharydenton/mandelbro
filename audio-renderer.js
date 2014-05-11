@@ -75,17 +75,17 @@ function AudioRenderer() {
 		uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
 	}
 
-	function onMouseMove(event) {
-		mouseDx = event.clientX / window.innerWidth - 0.5;
-		mouseDy = 0.5 - event.clientY / window.innerHeight;
+	function onMouseMove(e) {
+		mouseDx = e.clientX / window.innerWidth - 0.5;
+		mouseDy = 0.5 - e.clientY / window.innerHeight;
 	}
 
-	function onScroll(event) {
-		uniforms.offset.value.z += OFFSET_DELTA * event.wheelDelta;
+	function onScroll(e) {
+		uniforms.offset.value.z += OFFSET_DELTA * e.wheelDelta;
 	}
 
-	function onKeyPress(event) {
-		if (event.keyCode === 32) {
+	function onKeyPress(e) {
+		if (e.keyCode === 32) {
 			// spacebar pressed
 			loadRandomShader();
 		}
