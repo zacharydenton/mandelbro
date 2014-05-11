@@ -85,7 +85,7 @@ function AudioRenderer() {
 	}
 
 	function onScroll(e) {
-		uniforms.offset.value.z += OFFSET_DELTA * e.wheelDelta;
+		uniforms.offset.value.z += OFFSET_DELTA * e.wheelDelta * 0.01;
 	}
 
 	function onKeyPress(e) {
@@ -95,16 +95,36 @@ function AudioRenderer() {
 		}
 	}
 
-	var midiVals = [];
-	var midiOffsets = [];
 	function onMidiMessage(e) {
 		// assumes controller is bcr2000
+		if (e.data[0] !== 176) {
+			return;
+		}
 		var ccNum = e.data[1];
-		var ccVal = e.data[2];
+		if ([105, 106, 107, 108].indexOf(ccNum) !== -1) {
+			onMidiButton(ccNum, e.data[2]);
+		} else {
+			onMidiCC(ccNum, e.data[2]);
+		}
+	}
+
+	var midiVals = [];
+	var midiOffsets = [];
+	function onMidiCC(ccNum, ccVal) {
 		if (midiVals[ccNum] === undefined) {
 			midiVals[ccNum] = 64;
 		}
 		midiOffsets[ccNum] = ccVal - 64;
+	}
+
+	function onMidiButton(ccNum, ccVal) {
+		if (ccNum === 105) {
+			loadRandomShader();
+		} else if (ccNum === 106) {
+			loadNextShader();
+		} else if (ccNum === 108) {
+			uniforms.offset.value = new THREE.Vector3(0, 0, 0);
+		}
 	}
 
 	function clamp(val, min, max) {

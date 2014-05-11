@@ -22,11 +22,11 @@ vec3 hsv2rgb(vec3 c)
 
 void main(void)
 {
-	float scale = clamp(pow(0.1, offset.z) + 1.0, 0.0001, 4.0);
+	float scale = pow(0.01, offset.z);
 	vec2 z, c;
 
-	c.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale + clamp(offset.x, -0.5, 1.0) * 2.0;
-	c.y = (gl_FragCoord.y / resolution.y - 0.5) * scale + clamp(offset.y, -0.5, 0.5) * 2.0;
+	c.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale + offset.x * 2.0;
+	c.y = (gl_FragCoord.y / resolution.y - 0.5) * scale + offset.y * 2.0;
 
 	int iters = 0;
 	z = c;
