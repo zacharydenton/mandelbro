@@ -31,8 +31,8 @@ void main(void)
 	float y=u.y*tt+cos(t*2.3)*4.0;
 	float c=sin(x)+sin(y);
 	float zoom=sin(t)*sin(bass);
-	x=(offset.z+1.)*x*zoom*2.0+sin(t*1.1);
-	y=(offset.z+1.)*y*zoom*2.0+cos(t*1.3);
+	x=(sin(offset.z)+1.)*x*zoom*2.0+sin(t*1.1);
+	y=(sin(offset.z)+1.)*y*zoom*2.0+cos(t*1.3);
 	float xx=cos(t*0.7)*x-sin(t*0.7)*y;
 	float yy=sin(t*0.7)*x+cos(t*0.7)*y;
 	c=(sin(c+(sin(xx)+sin(yy)))+1.0)*0.4;
