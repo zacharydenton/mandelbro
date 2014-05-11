@@ -24,18 +24,18 @@ uniform float highEnd; // float in range 0-1 measuring high end volume (2000-200
 void main(void)
 {
 	vec2 u=(gl_FragCoord.xy/resolution.x)*2.0-vec2(1.0,resolution.y/resolution.x);
-	float t=max(sin(offset.x*time),bass)*0.5;
+	float t=max(sin(time),bass)*0.5+sin(time);
 
 	float tt=max(highEnd*10., 1.)*(sin(volume)+1.)*64.0;
 	float x=u.x*tt+sin(t*2.1)*4.0;
 	float y=u.y*tt+cos(t*2.3)*4.0;
 	float c=sin(x)+sin(y);
 	float zoom=sin(t)*sin(bass);
-	x=(sin(offset.z)+1.)*x*zoom*2.0+sin(t*1.1);
-	y=(sin(offset.z)+1.)*y*zoom*2.0+cos(t*1.3);
+	x=clamp(offset.z, 1., 5.)*x*zoom*2.0+sin(t*1.1);
+	y=clamp(offset.z, 1., 5.)*y*zoom*2.0+cos(t*1.3);
 	float xx=cos(t*0.7)*x-sin(t*0.7)*y;
 	float yy=sin(t*0.7)*x+cos(t*0.7)*y;
 	c=(sin(c+(sin(xx)+sin(yy)))+1.0)*0.4;
 	float v=2.0-length(u)*2.0;
-	gl_FragColor=vec4(v*vec3(c+v*0.4,(offset.x+offset.y)*c*c-0.5+v*0.5,sin(bass)*c*2.),1.0);
+	gl_FragColor=vec4(v*vec3(c+v*0.4,c*c-0.5+v*0.5,sin(bass)*c*2.),1.0);
 }
