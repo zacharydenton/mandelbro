@@ -57,5 +57,16 @@ function Mandelbro() {
 		fileReader.readAsArrayBuffer(file);
 	};
 
+	this.parseArrayBuffer = function(array) {
+		audioParser.parseArrayBuffer(array);
+	};
+
+	this.parseStream = function(streamUrl, duration) {
+		audioDuration = duration;
+		audioParser.parseStream(streamUrl);
+		audioPlaying = true;
+		audioRenderer.clear();
+	};
+
 	requestAnimFrame(updateAndRender);
 }

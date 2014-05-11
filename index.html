@@ -217,24 +217,32 @@ canvas {
 }
 
 #alternative {
-	display: none;
-}
-
-form {
 	position: absolute;
 	left: 50%;
-	top: 60%;
+	top: 53%;
 	width: 600px;
 	margin-left: -300px;
 	text-align: center;
-	color: #AAA;
+	color: #FFF;
 	font-family: 'Roboto';
-	font-size: 16px;
+	font-size: 24px;
 }
 
-form div {
-	text-align: center;
-	margin-bottom: 1em;
+#alternative p {
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+#sc-search {
+	background: 0;
+	font-weight: normal;
+	font-family: 'Roboto';
+	width: 350px;
+	border: 0;
+	border-bottom: 2px solid #00B2B2;
+	outline: none;
+	font-size: 24px;
+	color: #00B2B2;
 }
 </style>
 <script id="vertexShader" type="x-shader/x-vertex">
@@ -253,15 +261,10 @@ void main( void ) {
 <div id="render-area"></div>
 <div id="file-drop-area">
 	<div id="alternative">
-		<form id="file-chooser">
-			<p>Want to use a file input instead?</p>
-			<div>
-				<input name="source-file" id="source-file" type="file" />
-			</div>
-			<div>
-				<input type="submit" />
-			</div>
-		</form>
+		<p>Want to use SoundCloud instead?</p>
+		<div>
+			<input placeholder="Paste a URL" type="text" id="sc-search"></input>
+		</div>
 	</div>
 </div>
 
@@ -271,6 +274,12 @@ void main( void ) {
 	<div id="track"></div>
 </div>
 
+<script src="//connect.soundcloud.com/sdk.js"></script>
+<script>
+SC.initialize({
+	client_id: "6561f9221ad293bd6e88e8d1a87bd20f"
+});
+</script>
 <script src="three.min.js"></script>
 <script src="WebMIDIAPI.js"></script>
 <script src="id3.js"></script>

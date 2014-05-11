@@ -71,6 +71,17 @@ function AudioParser(dataSize, onAudioDataDecoded) {
 		audioContext.decodeAudioData(arrayBuffer, onDecodeData, onError);
 	};
 
+    this.parseStream = function (streamUrl) {
+        var audio = new Audio();
+        audio.autoplay = true;
+        audio.src = streamUrl;
+        sourceNode = audioContext.createMediaElementSource(audio);
+        sourceNode.connect(gainNode);
+        gainNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+        timePlaybackStarted = Date.now();
+    };
+
 	this.getTime = function() {
 		return (Date.now() - timePlaybackStarted) * 0.001;
 	};
