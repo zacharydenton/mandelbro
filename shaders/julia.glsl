@@ -22,18 +22,18 @@ vec3 hsv2rgb(vec3 c)
 
 void main(void)
 {
-	float scale = pow(0.99, 1.0 + offset.z);
+	float scale = pow(0.99, -100.0 + offset.z);
 	vec2 z, c;
 
 	z.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale;
 	z.y = (gl_FragCoord.y / resolution.y - 0.5) * scale;
 
-	#define ITER 50
+	#define ITER 80
 	int iter = ITER;
 	float minMag = 999999.0;
 	for(int i=0; i<ITER; i++) {
-		float x = (z.x * z.x - z.y * z.y) + offset.x + bass;
-		float y = (z.y * z.x + z.x * z.y) + offset.y + bass;
+		float x = (z.x * z.x - z.y * z.y) + clamp(offset.x, -0.5, 0.5) + 0.25 * bass;
+		float y = (z.y * z.x + z.x * z.y) + clamp(offset.y, -1.5, 0.5) + 0.25 * bass;
 
 		float mag = length(vec2(x, y));
 		if (mag < minMag) {
@@ -50,5 +50,5 @@ void main(void)
 
 	float center = mod(time / 30.0, 1.0);
 	float m = (iter == ITER) ? 0.0 : float(iter) / float(ITER);
-	gl_FragColor = vec4(hsv2rgb(vec3(m * fract(center + 0.3 * minMag), 0.9 + cos(time + lowerMid) * 0.1, 1.0)), 1.0);
+	gl_FragColor = vec4(hsv2rgb(vec3(center + minMag, m + bass, m)), 1.0);
 }
