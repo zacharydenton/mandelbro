@@ -46,7 +46,7 @@ window.requestAnimationFrame;
     function onKeyPress(evt) {
         if (evt.keyCode === 13) {
             var url = soundcloudSearch.value;
-            if (!url.indexOf("http") !== 0) {
+            if (!(url.indexOf("http") === 0)) {
                 url = "http://" + url;
             }
             getJSON("http://api.soundcloud.com/resolve.json?url=" + encodeURIComponent(url) + "&client_id=6561f9221ad293bd6e88e8d1a87bd20f", function(result) {
