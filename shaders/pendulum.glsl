@@ -27,7 +27,7 @@ void main( void ) {
 	vec2 v = (gl_FragCoord.xy - resolution/2.0) / min(resolution.y,resolution.x) * 20.0;
 
 	float rsum = 0.0;
-	float pi2 = 3.1415926535 * 1.*clamp(offset.z+offset.x+offset.y, 3., 4.);
+	float pi2 = 3.1415926535 * 1.*clamp(100.0*offset.z+offset.x+offset.y, 3., 4.);
 	float a = (1./5.)*pi2;
 	float C = cos(a)*(5. + 20.*max(volume,lowerMid));
 	float S = sin(a)*5.;

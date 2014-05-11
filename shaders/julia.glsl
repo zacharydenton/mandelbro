@@ -22,7 +22,7 @@ vec3 hsv2rgb(vec3 c)
 
 void main(void)
 {
-	float scale = pow(0.99, -100.0 + offset.z);
+	float scale = clamp(pow(0.01, -offset.z) - 4.0, -5.0, 1.0);
 	vec2 z, c;
 
 	z.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale;
@@ -32,8 +32,8 @@ void main(void)
 	int iter = ITER;
 	float minMag = 999999.0;
 	for(int i=0; i<ITER; i++) {
-		float x = (z.x * z.x - z.y * z.y) + clamp(offset.x, -0.5, 0.5) + 0.25 * bass;
-		float y = (z.y * z.x + z.x * z.y) + clamp(offset.y, -1.5, 0.5) + 0.25 * bass;
+		float x = (z.x * z.x - z.y * z.y) + clamp(offset.x, -0.125, 0.125) + 0.5 * bass;
+		float y = (z.y * z.x + z.x * z.y) + clamp(offset.y, -0.125, 0.125) + 0.5 * bass;
 
 		float mag = length(vec2(x, y));
 		if (mag < minMag) {

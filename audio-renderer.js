@@ -14,19 +14,19 @@ function AudioRenderer() {
 	var OFFSET_DELTA = 0.01;
 	var OFFSET_MIDI = 0.001;
 	var SHADERS = [
-		"tripendulum",
-		"julia",
 		"mandelbrot",
+		"dyson-sphere",
+		"boxes",
 		"monjori",
 		"tunnel",
-		"boxes",
 		"pendulum",
 		"sinewaves",
-		"dyson-sphere",
 		"lightbeam",
 		"pulsating_wave",
 		"stringy",
-		"colordots"
+		"colordots",
+		"tripendulum",
+		"julia"
 	];
 	var shaderIndex = -1;
 
@@ -174,7 +174,6 @@ function AudioRenderer() {
 			uniforms.offset.value.add(mouseOffset);
 		} else {
 			var midiOffset = new THREE.Vector3(midiOffsets[97], midiOffsets[98], midiOffsets[99]).multiplyScalar(1/64 * OFFSET_MIDI);
-			console.log(midiOffset);
 			uniforms.offset.value.add(midiOffset);
 		}
 

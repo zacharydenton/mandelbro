@@ -39,7 +39,7 @@ void main( void ) {
 	vec2 yaxis=vec2(S, C);
 	#define MAGIC 0.618
 	vec2 shift = vec2( 0, 1.0+MAGIC);
-	float zoom = 1.1 + offset.z * 0.2;
+	float zoom = 1.1 + offset.z * 0.4;
 	
 	for ( int i = 0; i < N; i++ ){
 		float rr = dot(v,v);
