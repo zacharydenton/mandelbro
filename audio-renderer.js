@@ -14,7 +14,6 @@ function AudioRenderer() {
 	var OFFSET_DELTA = 0.01;
 	var SHADERS = [
 		"boxes",
-		"fractal",
 		"mandelbrot",
 		"pendulum",
 		"sinewaves",
