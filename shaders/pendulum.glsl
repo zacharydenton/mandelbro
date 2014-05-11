@@ -48,7 +48,7 @@ void main( void ) {
 		rsum *= 1.01;
 		rsum += rr/10.;
 
-		v = vec2( dot(v, xaxis), dot(v, yaxis)) + shift +offset.x + offset.y;
+		v = vec2( dot(v, xaxis), dot(v, yaxis)) + shift;
 	}
 	float col1 = fract(rsum);
 	col1 = 2.0 * min(col1, 1.0-col1);
