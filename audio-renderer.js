@@ -15,10 +15,11 @@ function AudioRenderer() {
 	var DELTA_KBD = 0.01;
 	var OFFSET_MIDI = 0.001;
 	var SHADERS = [
-		"mandelbrot",
+		"tripendulum",
 		"dyson-sphere",
 		"boxes",
 		"monjori",
+		"mandelbrot",
 		"tunnel",
 		"pendulum",
 		"sinewaves",
@@ -26,7 +27,6 @@ function AudioRenderer() {
 		"pulsating_wave",
 		"stringy",
 		"colordots",
-		"tripendulum",
 		"julia"
 	];
 	var shaderIndex = -1;
