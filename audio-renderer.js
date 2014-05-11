@@ -12,6 +12,7 @@ function AudioRenderer() {
 	var BASE = Math.log(4) / LOG_MAX;
 	var DELTA = 0.01;
 	var OFFSET_DELTA = 0.01;
+	var OFFSET_MIDI = 0.001;
 	var SHADERS = [
 		"tripendulum",
 		"julia",
@@ -59,7 +60,7 @@ function AudioRenderer() {
 	scene.add(quad);
 
 	var volumeSmooth = smooth();
-	var beatSmooth = smooth();
+	var beatSmooth = smooth(0.2, 0.01);
 	var bassSmooth = smooth();
 	var lowerSmooth = smooth();
 	var upperSmooth = smooth();
@@ -70,6 +71,8 @@ function AudioRenderer() {
 
 	var renderer = new THREE.WebGLRenderer();
 	document.getElementById('render-area').appendChild(renderer.domElement);
+
+	var midiApi = null;
 
 	function onResize() {
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -90,6 +93,18 @@ function AudioRenderer() {
 			// spacebar pressed
 			loadNextShader();
 		}
+	}
+
+	var midiVals = [];
+	var midiOffsets = [];
+	function onMidiMessage(e) {
+		// assumes controller is bcr2000
+		var ccNum = e.data[1];
+		var ccVal = e.data[2];
+		if (midiVals[ccNum] === undefined) {
+			midiVals[ccNum] = 64;
+		}
+		midiOffsets[ccNum] = ccVal - 64;
 	}
 
 	function clamp(val, min, max) {
@@ -153,8 +168,15 @@ function AudioRenderer() {
 
 	this.render = function(audioData, audioTime) {
 		uniforms.time.value = audioTime;
-		var mouseOffset = new THREE.Vector3(mouseDx, mouseDy, 0).multiplyScalar(OFFSET_DELTA);
-		uniforms.offset.value.add(mouseOffset);
+
+		if (midiApi === null) {
+			var mouseOffset = new THREE.Vector3(mouseDx, mouseDy, 0).multiplyScalar(OFFSET_DELTA);
+			uniforms.offset.value.add(mouseOffset);
+		} else {
+			var midiOffset = new THREE.Vector3(midiOffsets[97], midiOffsets[98], midiOffsets[99]).multiplyScalar(1/64 * OFFSET_MIDI);
+			console.log(midiOffset);
+			uniforms.offset.value.add(midiOffset);
+		}
 
 		var bassEnd = audioData.length / 32;
 		var lowerEnd = bassEnd + audioData.length / 16;
@@ -180,6 +202,15 @@ function AudioRenderer() {
 	window.addEventListener('mousewheel', onScroll, false);
 	window.addEventListener('keypress', onKeyPress, false);
 	window.addEventListener('load', function() {
+		navigator.requestMIDIAccess().then(function(access) {
+			onMouseMove = function(){};
+			onScroll = function(){};
+			midiApi = access;
+			var inputs = midiApi.inputs()
+			for (var i = 0, l = inputs.length; i < l; i++) {
+				inputs[i].onmidimessage = onMidiMessage;
+			}
+		}, function(err){console.log(err);});
 		loadNextShader();
 		onResize();
 	}, false);

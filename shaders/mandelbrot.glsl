@@ -25,8 +25,8 @@ void main(void)
 	float scale = pow(0.99, 1.0 + offset.z);
 	vec2 z, c;
 
-	c.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale + clamp(offset.x, -0.5, 0.5);
-	c.y = (gl_FragCoord.y / resolution.y - 0.5) * scale + clamp(offset.y, -0.5, 0.5);
+	c.x = (resolution.x / resolution.y) * (gl_FragCoord.x / resolution.x - 0.5) * scale + offset.x;
+	c.y = (gl_FragCoord.y / resolution.y - 0.5) * scale + offset.y;
 
 	int iters = 0;
 	z = c;
