@@ -18,6 +18,10 @@ window.requestAnimationFrame;
     var trackEl = document.getElementById('track');
     var soundcloudSearch = document.getElementById('sc-search');
 
+    fileDropArea.addEventListener('drop', dropFile, false);
+    fileDropArea.addEventListener('dragover', cancel, false);
+    fileDropArea.addEventListener('dragenter', cancel, false);
+    fileDropArea.addEventListener('dragexit', cancel, false);
     soundcloudSearch.addEventListener('keypress', onKeyPress, false);
 
     function getJSON(url, callback) {
@@ -61,6 +65,10 @@ window.requestAnimationFrame;
         if (files.length) {
             go(files[0]);
         }
+    }
+
+    function cancel(evt) {
+        evt.preventDefault();
     }
 
     function go(file) {
