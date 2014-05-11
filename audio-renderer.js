@@ -15,16 +15,16 @@ function AudioRenderer() {
 	var SHADERS = [
 		"tripendulum",
 		"julia",
-		"boxes",
 		"mandelbrot",
+		"monjori",
+		"tunnel",
+		"boxes",
 		"pendulum",
 		"sinewaves",
 		"dyson-sphere",
 		"lightbeam",
-		"monjori",
 		"pulsating_wave",
 		"stringy",
-		"tunnel",
 		"colordots"
 	];
 	var shaderIndex = -1;
