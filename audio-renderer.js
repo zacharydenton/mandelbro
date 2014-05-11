@@ -75,16 +75,16 @@ function AudioRenderer() {
 		uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
 	}
 
-	function onMouseMove() {
+	function onMouseMove(event) {
 		mouseDx = event.clientX / window.innerWidth - 0.5;
 		mouseDy = 0.5 - event.clientY / window.innerHeight;
 	}
 
-	function onScroll() {
+	function onScroll(event) {
 		uniforms.offset.value.z += OFFSET_DELTA * event.wheelDelta;
 	}
 
-	function onKeyPress() {
+	function onKeyPress(event) {
 		if (event.keyCode === 32) {
 			// spacebar pressed
 			loadRandomShader();
