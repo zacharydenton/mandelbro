@@ -32,6 +32,6 @@ void main(){
 		c += 0.01 / (length(sin(p)-o)) * vec3(r, g, sin(lowerMid));
 	}
 	
-	gl_FragColor = vec4(c, 1);
+	gl_FragColor = vec4(c + sin(offset.z), 1);
 
 }

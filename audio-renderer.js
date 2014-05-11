@@ -16,7 +16,6 @@ function AudioRenderer() {
 		"tripendulum",
 		"julia",
 		"boxes",
-		"fractal",
 		"mandelbrot",
 		"pendulum",
 		"sinewaves",

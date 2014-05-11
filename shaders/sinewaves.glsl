@@ -18,22 +18,21 @@ uniform float highEnd; // float in range 0-1 measuring high end volume (2000-200
 void main( void ) {
 
 	vec2 p = ( gl_FragCoord.xy / resolution.xy ) - .5;
-	
+
 	float k1 = p.x * .30;
 	float k2 = 3.1;
-	
+
 	float k3 = 3.1;
-	
-	
-	float sx = offset.x + 10.*highEnd*upperMid*p.x * 2.0 * sin( 25.0 * p.x - 10. * (time)) * sin((time * time) * .000125);
-	
-	float sx2 = offset.y + 10.*bass*upperMid*k1 * sin( 44.0 * p.x - 10. * (time + k2)) * sin((time * time) * .00125 + k3);
-	
+
+
+	float sx = abs(offset.y)*10.*highEnd*upperMid*p.x * 2.0 * sin( 25.0 * p.x - 10. * (time)) * sin((time * time) * .000125);
+
+	float sx2 = abs(offset.y)*10.*bass*upperMid*k1 * sin( 44.0 * p.x - 10. * (time + k2)) * sin((time * time) * .00125 + k3);
+
 	float dy = 1./ ( 50. * abs(p.y - sx)) + 1./ ( 50. * abs(p.y + sx2));
-	
-	dy += 1./ (80. * length(p - vec2(p.x, 0.)));
-	
+
+	dy += abs(offset.z)/ (80. * length(p - vec2(p.x, 0.)));
+
 	gl_FragColor = vec4( 2.*bass*(p.x + 0.5) * dy, 0.5 * dy, (dy - 1.35), 1.2 );
 
 }
-
