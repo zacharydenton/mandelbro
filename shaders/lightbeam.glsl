@@ -17,7 +17,7 @@ uniform float highEnd; // float in range 0-1 measuring high end volume (2000-200
 void main( void ) {
 
 	vec2 position = ( gl_FragCoord.xy / resolution.xy );
-	float light = pow(1.0-abs(position.y-0.5),10.*beat);
+	float light = pow(1.0-abs(position.y-0.5),10.*beat+clamp(offset.z, 0., 100.));
 	gl_FragColor = vec4( pow(light,bass+abs(cos(-time+position.x*(1.0+cos(position.x-time)))/1.0))*2.0,light*1.0,light/2.0, 500000.0 );
 
 }

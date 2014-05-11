@@ -25,9 +25,9 @@ void main( void ) {
 	float k3 = 3.1;
 
 
-	float sx = 2.*clamp(offset.y,0.,3.)*10.*highEnd*upperMid*p.x * 2.0 * sin( 25.0 * p.x - 10. * (time)) * sin((time * time) * .000125);
+	float sx = 2.*clamp(offset.y,0.5,3.)*10.*highEnd*upperMid*p.x * 2.0 * sin( 25.0 * p.x - 10. * (time)) * sin((time * time) * .000125);
 
-	float sx2 = clamp(offset.y,0.,3.)*10.*bass*upperMid*k1 * sin( 44.0 * p.x - 10. * (time + k2)) * sin((time * time) * .00125 + k3);
+	float sx2 = clamp(offset.y,0.5,3.)*10.*bass*upperMid*k1 * sin( 44.0 * p.x - 10. * (time + k2)) * sin((time * time) * .00125 + k3);
 
 	float dy = 1./ ( 50. * abs(p.y - sx)) + 1./ ( 50. * abs(p.y + sx2));
 
